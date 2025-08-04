@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
-import contractABI from '../contractABI.json';
+import contractABI from 'Linkmart/contractABI.json';
 
 const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
 
