@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ethers } from 'ethers';
 import contractABI from '../contractABI.json';
 
-const contractAddress = 'YOUR_CONTRACT_ADDRESS_HERE';
+const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
 
 export default function Home() {
   const [showListForm, setShowListForm] = useState(false);
