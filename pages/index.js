@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import contractABI from '../contractABI.json';
 
-const contractAddress = "PASTE_YOUR_DEPLOYED_CONTRACT_ADDRESS";
+const contractAddress = " 0xD79642D4349DE67F645dA1d88937777Ed93b94b7";
 
 export default function Home() {
   const [account, setAccount] = useState("");
