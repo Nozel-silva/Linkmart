@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
-import contractABI from '../contractABI.json'; 
+
 const contractABI =[
 	{
 		"inputs": [],
