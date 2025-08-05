@@ -1,19 +1,31 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
-import contractABI from '.../contractABI.json';
+import contractABI from '../contractABI.json'; // <-- Corrected path
 
-const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
+const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501'; // <-- Your deployed contract on Edgen
 
 export default function Home() {
   const [showListForm, setShowListForm] = useState(false);
   const [showBuyForm, setShowBuyForm] = useState(false);
-
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
   const [price, setPrice] = useState('');
-
   const [itemId, setItemId] = useState('');
   const [buyPrice, setBuyPrice] = useState('');
+
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        alert('Wallet connected!');
+      } catch (error) {
+        alert('Connection failed');
+        console.error(error);
+      }
+    } else {
+      alert('Please install MetaMask to use this app.');
+    }
+  };
 
   const connectToContract = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -22,17 +34,27 @@ export default function Home() {
   };
 
   const listItem = async () => {
-    const contract = connectToContract();
-    const tx = await contract.listItem(title, link, ethers.utils.parseEther(price));
-    await tx.wait();
-    alert('Item listed successfully!');
+    try {
+      const contract = connectToContract();
+      const tx = await contract.listItem(title, link, ethers.utils.parseEther(price));
+      await tx.wait();
+      alert('Item listed successfully!');
+    } catch (err) {
+      console.error(err);
+      alert('Error listing item: ' + err.message);
+    }
   };
 
   const buyItem = async () => {
-    const contract = connectToContract();
-    const tx = await contract.buyItem(itemId, { value: ethers.utils.parseEther(buyPrice) });
-    await tx.wait();
-    alert('Item purchased successfully!');
+    try {
+      const contract = connectToContract();
+      const tx = await contract.buyItem(itemId, { value: ethers.utils.parseEther(buyPrice) });
+      await tx.wait();
+      alert('Item purchased successfully!');
+    } catch (err) {
+      console.error(err);
+      alert('Error purchasing item: ' + err.message);
+    }
   };
 
   const containerStyle = {
@@ -83,6 +105,8 @@ export default function Home() {
     <div style={containerStyle}>
       <h1 style={{ fontSize: '36px', textShadow: '0 0 10px #0ff' }}>🚀 Web3 Marketplace</h1>
 
+      <button style={buttonStyle} onClick={connectWallet}>🔌 Connect Wallet</button>
+
       <button style={buttonStyle} onClick={() => setShowListForm(!showListForm)}>
         {showListForm ? '🔽 Hide Listing Form' : '📦 List an Item'}
       </button>
@@ -91,7 +115,7 @@ export default function Home() {
         <div style={formWrapper}>
           <input style={inputStyle} type="text" placeholder="Title" onChange={e => setTitle(e.target.value)} /><br />
           <input style={inputStyle} type="text" placeholder="Download Link" onChange={e => setLink(e.target.value)} /><br />
-          <input style={inputStyle} type="number" placeholder="Price in ETH" onChange={e => setPrice(e.target.value)} /><br />
+          <input style={inputStyle} type="number" placeholder="Price in EDGEN" onChange={e => setPrice(e.target.value)} /><br />
           <button style={buttonStyle} onClick={listItem}>✅ Submit Listing</button>
         </div>
       )}
@@ -103,10 +127,11 @@ export default function Home() {
       {showBuyForm && (
         <div style={formWrapper}>
           <input style={inputStyle} type="number" placeholder="Item ID" onChange={e => setItemId(e.target.value)} /><br />
-          <input style={inputStyle} type="number" placeholder="Price in ETH" onChange={e => setBuyPrice(e.target.value)} /><br />
+          <input style={inputStyle} type="number" placeholder="Price in EDGEN" onChange={e => setBuyPrice(e.target.value)} /><br />
           <button style={buttonStyle} onClick={buyItem}>💳 Submit Purchase</button>
         </div>
       )}
     </div>
   );
-}
+                                                                              }
+        
