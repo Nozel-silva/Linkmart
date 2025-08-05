@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
-import contractABI from '../contractABI.json'; // <-- Corrected path
+import contractABI from '../contractABI.json'; // ✅ Make sure ABI is present and valid
 
-const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501'; // <-- Your deployed contract on Edgen
+const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
 
 export default function Home() {
   const [showListForm, setShowListForm] = useState(false);
   const [showBuyForm, setShowBuyForm] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
+
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
   const [price, setPrice] = useState('');
+
   const [itemId, setItemId] = useState('');
   const [buyPrice, setBuyPrice] = useState('');
 
@@ -17,25 +20,34 @@ export default function Home() {
     if (typeof window.ethereum !== 'undefined') {
       try {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setWalletConnected(true);
         alert('Wallet connected!');
       } catch (error) {
         alert('Connection failed');
         console.error(error);
       }
     } else {
-      alert('Please install MetaMask to use this app.');
+      alert('Please install MetaMask');
     }
   };
 
   const connectToContract = () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    return new ethers.Contract(contractAddress, contractABI, signer);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+      return contract;
+    } catch (err) {
+      console.error("Contract connection error:", err);
+      return null;
+    }
   };
 
   const listItem = async () => {
+    if (!walletConnected) return alert("Please connect wallet first!");
     try {
       const contract = connectToContract();
+      if (!contract) throw new Error("Contract not loaded");
       const tx = await contract.listItem(title, link, ethers.utils.parseEther(price));
       await tx.wait();
       alert('Item listed successfully!');
@@ -46,8 +58,10 @@ export default function Home() {
   };
 
   const buyItem = async () => {
+    if (!walletConnected) return alert("Please connect wallet first!");
     try {
       const contract = connectToContract();
+      if (!contract) throw new Error("Contract not loaded");
       const tx = await contract.buyItem(itemId, { value: ethers.utils.parseEther(buyPrice) });
       await tx.wait();
       alert('Item purchased successfully!');
@@ -57,6 +71,7 @@ export default function Home() {
     }
   };
 
+  // 🔧 Styling (same as before)
   const containerStyle = {
     fontFamily: 'Orbitron, sans-serif',
     backgroundColor: '#0e0e0e',
@@ -103,9 +118,11 @@ export default function Home() {
 
   return (
     <div style={containerStyle}>
-      <h1 style={{ fontSize: '36px', textShadow: '0 0 10px #0ff' }}>🚀 Web3 Marketplace</h1>
+      <h1 style={{ fontSize: '36px', textShadow: '0 0 10px #0ff' }}>🚀 Web3 Marketplace project by Emmanuel Agafie  </h1>
 
-      <button style={buttonStyle} onClick={connectWallet}>🔌 Connect Wallet</button>
+      <button style={buttonStyle} onClick={connectWallet}>
+        {walletConnected ? '✅ Wallet Connected' : '🔌 Connect Wallet'}
+      </button>
 
       <button style={buttonStyle} onClick={() => setShowListForm(!showListForm)}>
         {showListForm ? '🔽 Hide Listing Form' : '📦 List an Item'}
@@ -133,5 +150,5 @@ export default function Home() {
       )}
     </div>
   );
-                                                                              }
-        
+    }
+    
