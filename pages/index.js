@@ -32,16 +32,16 @@ export default function Home() {
   };
 
   const connectToContract = () => {
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, contractABI, signer);
-      return contract;
-    } catch (err) {
-      console.error("Contract connection error:", err);
-      return null;
-    }
-  };
+  if (!window.ethereum) {
+    alert('Please install MetaMask');
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  return new ethers.Contract(contractAddress, contractABI, signer);
+};
+
 
   const listItem = async () => {
     if (!walletConnected) return alert("Please connect wallet first!");
