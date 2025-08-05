@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import contractABI from '../contractABI.json'; 
+const contractABI =
 
+
+  
 const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
 
 export default function Home() {
