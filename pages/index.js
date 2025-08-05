@@ -117,7 +117,7 @@ export default function Home() {
 
   return (
     <div style={containerStyle}>
-      <h1 style={{ fontSize: '36px', textShadow: '0 0 10px #0ff' }}>🚀 Web3 Marketplace project by Emmanuel Agafie  </h1>
+      <h1 style={{ fontSize: '36px', textShadow: '0 0 10px #0ff' }}> Closed Sea🌊 </h1>
 
       <button style={buttonStyle} onClick={connectWallet}>
         {walletConnected ? '✅ Wallet Connected' : '🔌 Connect Wallet'}
@@ -147,6 +147,8 @@ export default function Home() {
           <button style={buttonStyle} onClick={buyItem}>💳 Submit Purchase</button>
         </div>
       )}
+
+<footer style={{ fontSize: '16px', textShadow: '0 0 10px #0ff' }}> By Emmanuel Agafie 🌊 </footer>
     </div>
   );
     }
