@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
 
-// ─── Add this line (adjust the path if your global.css is in a different folder) ───
- // or './global.css' or '@/styles/global.css' — match your folder structure
 const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
-
-// Assume contractABI is defined somewhere — add it if missing
-const contractABI = [ /* your ABI array here */ ];
 
 export default function Home() {
   const [showListForm, setShowListForm] = useState(false);
@@ -20,7 +15,6 @@ export default function Home() {
   const [itemId, setItemId] = useState('');
   const [buyPrice, setBuyPrice] = useState('');
 
-  // Your original logic (unchanged)
   const connectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
@@ -41,6 +35,7 @@ export default function Home() {
       alert('Please install MetaMask');
       return;
     }
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     return new ethers.Contract(contractAddress, contractABI, signer);
@@ -74,103 +69,246 @@ export default function Home() {
     }
   };
 
+  // ─── Inline Styles ───────────────────────────────────────────────────────────
+
+  const pageStyle = {
+    fontFamily: 'Orbitron, sans-serif',
+    background: 'linear-gradient(to bottom, #050509, #0a0a0f)',
+    color: '#00ffff',
+    minHeight: '100vh',
+    padding: '40px 20px',
+    textAlign: 'center',
+  };
+
+  const headerStyle = {
+    marginBottom: '60px',
+  };
+
+  const titleStyle = {
+    fontSize: 'clamp(2.5rem, 8vw, 5.5rem)',
+    fontWeight: '700',
+    letterSpacing: '2px',
+    textShadow: '0 0 15px #00ffff, 0 0 30px #00ffff33',
+    marginBottom: '12px',
+  };
+
+  const subtitleStyle = {
+    fontFamily: 'Inter, sans-serif',
+    fontSize: '1.1rem',
+    color: '#a0f0ffcc',
+    maxWidth: '700px',
+    margin: '0 auto',
+    lineHeight: '1.5',
+  };
+
+  const walletButtonStyle = {
+    padding: '14px 32px',
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    color: walletConnected ? '#ffffff' : '#00ffff',
+    background: walletConnected ? 'rgba(34, 197, 94, 0.25)' : 'rgba(0, 255, 255, 0.12)',
+    border: `1px solid ${walletConnected ? '#22c55e' : '#00ffff'}`,
+    borderRadius: '12px',
+    boxShadow: `0 0 18px ${walletConnected ? '#22c55e66' : '#00ffff44'}`,
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    marginBottom: '50px',
+  };
+
+  const sectionStyle = {
+    background: 'rgba(10, 10, 15, 0.45)',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(0, 255, 255, 0.25)',
+    borderRadius: '16px',
+    padding: '32px',
+    margin: '20px auto',
+    maxWidth: '600px',
+    boxShadow: '0 8px 32px rgba(0, 255, 255, 0.15)',
+    transition: 'all 0.4s ease',
+  };
+
+  const sectionHeaderStyle = {
+    fontSize: '1.6rem',
+    fontWeight: '600',
+    marginBottom: '24px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#00ffff',
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '14px 18px',
+    marginBottom: '16px',
+    background: 'rgba(0, 0, 0, 0.5)',
+    border: '1px solid rgba(0, 255, 255, 0.4)',
+    borderRadius: '10px',
+    color: '#00ffff',
+    fontSize: '1rem',
+    fontFamily: 'Inter, sans-serif',
+    outline: 'none',
+    transition: 'all 0.3s ease',
+  };
+
+  const actionButtonStyle = {
+    width: '100%',
+    padding: '14px',
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    border: 'none',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 0 15px rgba(0, 255, 255, 0.3)',
+  };
+
+  const listButtonStyle = {
+    ...actionButtonStyle,
+    background: '#00ffff',
+    color: '#000000',
+  };
+
+  const buyButtonStyle = {
+    ...actionButtonStyle,
+    background: '#ff00ff',
+    color: '#ffffff',
+  };
+
+  const footerStyle = {
+    marginTop: '80px',
+    fontSize: '0.95rem',
+    color: '#a0f0ff88',
+    fontFamily: 'Inter, sans-serif',
+  };
+
   return (
-    <>
-      <div className="bg-glow" />
+    <div style={pageStyle}>
+      <header style={headerStyle}>
+        <h1 style={titleStyle}>Closed Sea 🌊</h1>
+        <p style={subtitleStyle}>
+          Decentralized marketplace for exclusive digital assets and downloads.
+        </p>
+      </header>
 
-      <div className="container">
-        <header className="text-center mb-16">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-wide text-neon-cyan">
-            Closed Sea <span style={{ color: 'var(--cyber-magenta)' }}>🌊</span>
-          </h1>
-          <p style={{ fontFamily: 'Inter, sans-serif', marginTop: '1rem', fontSize: '1.2rem', color: '#a0f0ffcc', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Decentralized marketplace for exclusive digital downloads and assets.
-          </p>
-        </header>
+      <button
+        style={{
+          ...walletButtonStyle,
+          transform: 'scale(1)',
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+        onClick={connectWallet}
+      >
+        {walletConnected ? '✅ Wallet Connected' : '🔌 Connect Wallet'}
+      </button>
 
-        <div className="flex justify-center mb-12">
-          <button
-            onClick={connectWallet}
-            className={`btn-neon btn-connect px-10 py-4 text-lg ${walletConnected ? 'bg-green-700/70 border-green-400 text-white' : ''}`}
-          >
-            {walletConnected ? '✅ Wallet Connected' : '🔌 Connect Wallet'}
-          </button>
+      <div style={sectionStyle}>
+        <div
+          style={sectionHeaderStyle}
+          onClick={() => setShowListForm(!showListForm)}
+        >
+          <span>📦 List an Item</span>
+          <span>{showListForm ? '−' : '+'}</span>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* List Section */}
-          <div className="glass-card p-8">
-            <div className="section-header" onClick={() => setShowListForm(!showListForm)}>
-              <span>📦 List an Item</span>
-              <span>{showListForm ? '−' : '+'}</span>
-            </div>
-
-            {showListForm && (
-              <div className="space-y-5 animate-fade-in mt-6">
-                <input
-                  type="text"
-                  placeholder="Asset Title"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  className="input-field"
-                />
-                <input
-                  type="text"
-                  placeholder="Download / Content Link"
-                  value={link}
-                  onChange={e => setLink(e.target.value)}
-                  className="input-field"
-                />
-                <input
-                  type="number"
-                  placeholder="Price in EDGEN"
-                  value={price}
-                  onChange={e => setPrice(e.target.value)}
-                  className="input-field"
-                />
-                <button onClick={listItem} className="btn-neon btn-list w-full">
-                  ✅ List Asset
-                </button>
-              </div>
-            )}
+        {showListForm && (
+          <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+            <input
+              style={inputStyle}
+              type="text"
+              placeholder="Asset Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <input
+              style={inputStyle}
+              type="text"
+              placeholder="Download / Content Link"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+            />
+            <input
+              style={inputStyle}
+              type="number"
+              placeholder="Price in EDGEN"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+            <button
+              style={listButtonStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.03)';
+                e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 255, 255, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.3)';
+              }}
+              onClick={listItem}
+            >
+              ✅ List Asset
+            </button>
           </div>
-
-          {/* Buy Section */}
-          <div className="glass-card p-8">
-            <div className="section-header" onClick={() => setShowBuyForm(!showBuyForm)}>
-              <span>🛒 Acquire an Asset</span>
-              <span>{showBuyForm ? '−' : '+'}</span>
-            </div>
-
-            {showBuyForm && (
-              <div className="space-y-5 animate-fade-in mt-6">
-                <input
-                  type="number"
-                  placeholder="Item ID"
-                  value={itemId}
-                  onChange={e => setItemId(e.target.value)}
-                  className="input-field"
-                />
-                <input
-                  type="number"
-                  placeholder="Price in EDGEN"
-                  value={buyPrice}
-                  onChange={e => setBuyPrice(e.target.value)}
-                  className="input-field"
-                />
-                <button onClick={buyItem} className="btn-neon btn-buy w-full">
-                  💳 Purchase Now
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <footer className="text-center mt-20 text-gray-500 text-sm">
-          <p>Built on-chain • By Emmanuel Agafie 🌊</p>
-          <p style={{ marginTop: '0.5rem' }}>Closed Sea — Ownership meets the future.</p>
-        </footer>
+        )}
       </div>
-    </>
+
+      <div style={sectionStyle}>
+        <div
+          style={sectionHeaderStyle}
+          onClick={() => setShowBuyForm(!showBuyForm)}
+        >
+          <span>🛒 Acquire an Asset</span>
+          <span>{showBuyForm ? '−' : '+'}</span>
+        </div>
+
+        {showBuyForm && (
+          <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+            <input
+              style={inputStyle}
+              type="number"
+              placeholder="Item ID"
+              value={itemId}
+              onChange={(e) => setItemId(e.target.value)}
+            />
+            <input
+              style={inputStyle}
+              type="number"
+              placeholder="Price in EDGEN"
+              value={buyPrice}
+              onChange={(e) => setBuyPrice(e.target.value)}
+            />
+            <button
+              style={buyButtonStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.03)';
+                e.currentTarget.style.boxShadow = '0 0 25px rgba(255, 0, 255, 0.6)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.3)';
+              }}
+              onClick={buyItem}
+            >
+              💳 Purchase Now
+            </button>
+          </div>
+        )}
+      </div>
+
+      <footer style={footerStyle}>
+        Built on-chain • By Emmanuel Agafie 🌊<br />
+        Closed Sea — Where digital ownership meets the future.
+      </footer>
+
+      {/* Simple fade-in keyframe (inline via style tag would be better, but this works in most browsers) */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
   );
-      }
+     }
