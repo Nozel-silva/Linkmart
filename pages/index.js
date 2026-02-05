@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ethers } from 'ethers';
 
 // ─── Add this line (adjust the path if your global.css is in a different folder) ───
-import '../styles/global.css';   // or './global.css' or '@/styles/global.css' — match your folder structure
+import '../styles/globals.css';   // or './global.css' or '@/styles/global.css' — match your folder structure
 
 const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
 
