@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
-  
+
 const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
+
+// Assume contractABI is defined somewhere — add it if missing
+const contractABI = [ /* your ABI array here */ ];
 
 export default function Home() {
   const [showListForm, setShowListForm] = useState(false);
@@ -15,6 +18,7 @@ export default function Home() {
   const [itemId, setItemId] = useState('');
   const [buyPrice, setBuyPrice] = useState('');
 
+  // ─── Your original logic (unchanged) ────────────────────────────────────────
   const connectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
@@ -31,16 +35,14 @@ export default function Home() {
   };
 
   const connectToContract = () => {
-  if (!window.ethereum) {
-    alert('Please install MetaMask');
-    return;
-  }
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  return new ethers.Contract(contractAddress, contractABI, signer);
-};
-
+    if (!window.ethereum) {
+      alert('Please install MetaMask');
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    return new ethers.Contract(contractAddress, contractABI, signer);
+  };
 
   const listItem = async () => {
     if (!walletConnected) return alert("Please connect wallet first!");
@@ -69,87 +71,105 @@ export default function Home() {
       alert('Error purchasing item: ' + err.message);
     }
   };
-
-  // 🔧 Styling (same as before)
-  const containerStyle = {
-    fontFamily: 'Orbitron, sans-serif',
-    backgroundColor: '#0e0e0e',
-    color: '#0ff',
-    minHeight: '100vh',
-    padding: '40px',
-    textAlign: 'center',
-  };
-
-  const inputStyle = {
-    margin: '10px',
-    padding: '10px',
-    width: '80%',
-    maxWidth: '400px',
-    fontSize: '16px',
-    backgroundColor: '#1f1f1f',
-    color: '#0ff',
-    border: '1px solid #0ff',
-    borderRadius: '8px',
-  };
-
-  const buttonStyle = {
-    margin: '15px',
-    padding: '12px 20px',
-    fontSize: '16px',
-    color: '#000',
-    background: '#0ff',
-    border: 'none',
-    borderRadius: '12px',
-    boxShadow: '0 0 15px #0ff',
-    cursor: 'pointer',
-  };
-
-  const formWrapper = {
-    marginTop: '20px',
-    marginBottom: '40px',
-    border: '1px solid #0ff',
-    padding: '20px',
-    borderRadius: '12px',
-    background: '#111',
-    boxShadow: '0 0 20px #0ff5',
-    display: 'inline-block',
-  };
+  // ──────────────────────────────────────────────────────────────────────────────
 
   return (
-    <div style={containerStyle}>
-      <h1 style={{ fontSize: '36px', textShadow: '0 0 10px #0ff' }}> Closed Sea🌊 </h1>
+    <>
+      <div className="bg-glow" />
 
-      <button style={buttonStyle} onClick={connectWallet}>
-        {walletConnected ? '✅ Wallet Connected' : '🔌 Connect Wallet'}
-      </button>
+      <div className="container">
+        <header className="text-center mb-16">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-wide text-neon-cyan">
+            Closed Sea <span style={{ color: 'var(--cyber-magenta)' }}>🌊</span>
+          </h1>
+          <p style={{ fontFamily: 'Inter, sans-serif', marginTop: '1rem', fontSize: '1.2rem', color: '#a0f0ffcc', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
+            Decentralized marketplace for exclusive digital downloads and assets.
+          </p>
+        </header>
 
-      <button style={buttonStyle} onClick={() => setShowListForm(!showListForm)}>
-        {showListForm ? '🔽 Hide Listing Form' : '📦 List an Item'}
-      </button>
-
-      {showListForm && (
-        <div style={formWrapper}>
-          <input style={inputStyle} type="text" placeholder="Title" onChange={e => setTitle(e.target.value)} /><br />
-          <input style={inputStyle} type="text" placeholder="Download Link" onChange={e => setLink(e.target.value)} /><br />
-          <input style={inputStyle} type="number" placeholder="Price in EDGEN" onChange={e => setPrice(e.target.value)} /><br />
-          <button style={buttonStyle} onClick={listItem}>✅ Submit Listing</button>
+        <div className="flex justify-center mb-12">
+          <button
+            onClick={connectWallet}
+            className={`btn-neon btn-connect px-10 py-4 text-lg ${walletConnected ? 'bg-green-700/70 border-green-400 text-white' : ''}`}
+          >
+            {walletConnected ? '✅ Wallet Connected' : '🔌 Connect Wallet'}
+          </button>
         </div>
-      )}
 
-      <button style={buttonStyle} onClick={() => setShowBuyForm(!showBuyForm)}>
-        {showBuyForm ? '🔽 Hide Buy Form' : '🛒 Buy an Item'}
-      </button>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* List Section */}
+          <div className="glass-card p-8">
+            <div className="section-header" onClick={() => setShowListForm(!showListForm)}>
+              <span>📦 List an Item</span>
+              <span>{showListForm ? '−' : '+'}</span>
+            </div>
 
-      {showBuyForm && (
-        <div style={formWrapper}>
-          <input style={inputStyle} type="number" placeholder="Item ID" onChange={e => setItemId(e.target.value)} /><br />
-          <input style={inputStyle} type="number" placeholder="Price in EDGEN" onChange={e => setBuyPrice(e.target.value)} /><br />
-          <button style={buttonStyle} onClick={buyItem}>💳 Submit Purchase</button>
+            {showListForm && (
+              <div className="space-y-5 animate-fade-in mt-6">
+                <input
+                  type="text"
+                  placeholder="Asset Title"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  className="input-field"
+                />
+                <input
+                  type="text"
+                  placeholder="Download / Content Link"
+                  value={link}
+                  onChange={e => setLink(e.target.value)}
+                  className="input-field"
+                />
+                <input
+                  type="number"
+                  placeholder="Price in EDGEN"
+                  value={price}
+                  onChange={e => setPrice(e.target.value)}
+                  className="input-field"
+                />
+                <button onClick={listItem} className="btn-neon btn-list w-full">
+                  ✅ List Asset
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Buy Section */}
+          <div className="glass-card p-8">
+            <div className="section-header" onClick={() => setShowBuyForm(!showBuyForm)}>
+              <span>🛒 Acquire an Asset</span>
+              <span>{showBuyForm ? '−' : '+'}</span>
+            </div>
+
+            {showBuyForm && (
+              <div className="space-y-5 animate-fade-in mt-6">
+                <input
+                  type="number"
+                  placeholder="Item ID"
+                  value={itemId}
+                  onChange={e => setItemId(e.target.value)}
+                  className="input-field"
+                />
+                <input
+                  type="number"
+                  placeholder="Price in EDGEN"
+                  value={buyPrice}
+                  onChange={e => setBuyPrice(e.target.value)}
+                  className="input-field"
+                />
+                <button onClick={buyItem} className="btn-neon btn-buy w-full">
+                  💳 Purchase Now
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
 
-<footer style={{ fontSize: '16px', textShadow: '0 0 10px #0ff' }}> By Emmanuel Agafie 🌊 </footer>
-    </div>
+        <footer className="text-center mt-20 text-gray-500 text-sm">
+          <p>Built on-chain • By Emmanuel Agafie 🌊</p>
+          <p style={{ marginTop: '0.5rem' }}>Closed Sea — Ownership meets the future.</p>
+        </footer>
+      </div>
+    </>
   );
-    }
-    
+                    }
