@@ -1,29 +1,160 @@
-body {
-  font-family: sans-serif;
-  background-color: #f4f4f4;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --cyber-cyan: #00ffff;
+  --cyber-magenta: #ff00ff;
+  --cyber-dark: #0a0a0f;
+  --cyber-darker: #050509;
+  --glass-bg: rgba(10, 10, 15, 0.4);
+  --glass-border: rgba(0, 255, 255, 0.3);
+}
+
+* {
   margin: 0;
-  padding: 40px;
-  text-align: center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.container {
-  background: white;
-  padding: 20px;
+body {
+  background: linear-gradient(to bottom, var(--cyber-darker), black);
+  color: var(--cyber-cyan);
+  font-family: 'Orbitron', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle animated background glow */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.07) 0%, transparent 60%);
+  animation: pulse-glow 5s ease-in-out infinite;
+  opacity: 0.35;
+  z-index: -1;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(1.05); }
+}
+
+/* Neon text shadow */
+.text-neon-cyan {
+  text-shadow: 0 0 8px var(--cyber-cyan), 0 0 16px var(--cyber-cyan), 0 0 32px rgba(0,255,255,0.4);
+}
+
+/* Glass card style */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.12);
+  transition: all 0.4s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 255, 255, 0.5);
+  box-shadow: 0 12px 40px rgba(0, 255, 255, 0.2);
+}
+
+/* Form inputs */
+.input-field {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.35);
   border-radius: 10px;
-  display: inline-block;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  color: var(--cyber-cyan);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
-button {
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #1e1e1e;
-  color: white;
+.input-field:focus {
+  outline: none;
+  border-color: var(--cyber-cyan);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+}
+
+/* Buttons */
+.btn-neon {
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   border: none;
-  border-radius: 6px;
+}
+
+.btn-connect {
+  background: rgba(0, 255, 255, 0.15);
+  color: var(--cyber-cyan);
+  border: 1px solid var(--cyber-cyan);
+}
+
+.btn-connect:hover {
+  background: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-list {
+  background: var(--cyber-cyan);
+  color: black;
+}
+
+.btn-list:hover {
+  background: white;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+  transform: scale(1.03);
+}
+
+.btn-buy {
+  background: var(--cyber-magenta);
+  color: white;
+}
+
+.btn-buy:hover {
+  background: white;
+  color: black;
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.7);
+  transform: scale(1.03);
+}
+
+/* Fade-in animation for forms */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Section headers */
+.section-header {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #333;
-}
+.section-header:hover {
+  color: white;
+  }
