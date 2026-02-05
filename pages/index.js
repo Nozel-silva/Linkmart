@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
 
+// ─── Add this line (adjust the path if your global.css is in a different folder) ───
+import '../styles/global.css';   // or './global.css' or '@/styles/global.css' — match your folder structure
+
 const contractAddress = '0xc979F91746132cA63C027AbfD04273fbE2ad4501';
 
 // Assume contractABI is defined somewhere — add it if missing
@@ -18,7 +21,7 @@ export default function Home() {
   const [itemId, setItemId] = useState('');
   const [buyPrice, setBuyPrice] = useState('');
 
-  // ─── Your original logic (unchanged) ────────────────────────────────────────
+  // Your original logic (unchanged)
   const connectWallet = async () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
@@ -71,7 +74,6 @@ export default function Home() {
       alert('Error purchasing item: ' + err.message);
     }
   };
-  // ──────────────────────────────────────────────────────────────────────────────
 
   return (
     <>
@@ -172,4 +174,4 @@ export default function Home() {
       </div>
     </>
   );
-                    }
+      }
