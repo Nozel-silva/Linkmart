@@ -76,8 +76,13 @@ export default function Home() {
     background: 'linear-gradient(to bottom, #050509, #0a0a0f)',
     color: '#00ffff',
     minHeight: '100vh',
+    height: '100vh',
+    margin: 0,
     padding: '40px 20px',
     textAlign: 'center',
+    boxSizing: 'border-box',
+    width: '100%',
+    overflowX: 'hidden',
   };
 
   const headerStyle = {
@@ -302,7 +307,7 @@ export default function Home() {
         Closed Sea — Where digital ownership meets the future.
       </footer>
 
-      {/* Simple fade-in keyframe (inline via style tag would be better, but this works in most browsers) */}
+      {/* Inline keyframes for fade animation */}
       <style jsx global>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(12px); }
@@ -311,4 +316,4 @@ export default function Home() {
       `}</style>
     </div>
   );
-     }
+    }
